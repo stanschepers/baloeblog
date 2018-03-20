@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-blogpage{% endblock %}
+
+{% block content %}
+    <div class="tile is-antecestor">
+        <div class="tile is-parent">
+            <div class="tile is-child box">
+
+            <h1 class="title">{{ page.title }}</h1>
+    <small class="meta subtitle is-7 has-text-black">{{ page.date }}</small>
+
+    <div class="intro subtitle is-6 has-text-dark">{{ page.intro }}</div>
+
+    <div class="content"> {{ page.body|richtext }} </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tile is-antecestor">
+        <div class="tile is-parent">
+            <div class="tile is-child box">
+    {% for item in page.gallery_images.all %}
+            {% image item.image fill-320x240 %}
+            <p>{{ item.caption }}</p>
+    {% endfor %}
+                <p><a class="button is-link" href="{{ page.get_parent.url }}">Return to blog</a></p>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

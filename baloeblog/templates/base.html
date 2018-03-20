@@ -1,0 +1,72 @@
+{% load static wagtailuserbar %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>
+        {% block title %}
+            {% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}
+        {% endblock %}
+        {% block title_suffix %}
+            {% with self.get_site.site_name as site_name %}
+                {% if site_name %}- {{ site_name }}{% endif %}
+            {% endwith %}
+        {% endblock %}
+    </title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="{% static 'baloe.css' %}">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+    {# Global stylesheets #}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/baloeblog.css' %}">
+
+    {% block extra_css %}
+        {# Override this in templates to add extra stylesheets #}
+    {% endblock %}
+    <style>
+        html {
+            background-color: whitesmoke;
+        }
+
+        .box {
+            border-color: orange;
+        }
+
+        hr {
+            background-color: orangered;
+        }
+    </style>
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+{% wagtailuserbar %}
+<section class="section">
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="has-text-centered">
+            Gaat om <span class="has-text-primary"> 16 uur </span> offline • V.U. <a
+                href="mailto:vu@winak.be?Subject=Prosit%20VU!%20🍻">Eline Mau </a> 🖍
+        </div>
+    </div>
+</section>
+
+{# Global javascript #}
+<script type="text/javascript" src="{% static 'js/baloeblog.js' %}"></script>
+
+{% block extra_js %}
+    {# Override this in templates to add extra javascript #}
+{% endblock %}
+</body>
+</html>
+

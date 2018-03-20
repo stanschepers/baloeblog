@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    <h1 class="title">{{ page.title }}</h1>
+    <div class="tile is-antecestor">
+        <div class="tile is-parent">
+            <div class="tile is-child box">
+                <div class="content">{{ page.intro| richtext }}</div>
+            </div>
+        </div>
+    </div>
+
+    {% for post in page.get_children %}
+        <div class="tile is-antecestor">
+            <div class="tile is-parent">
+                <div class="tile is-child box">
+                    <h2 style="font-size: 18pt"><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+
+                    <small>{{ post.specific.intro }}</small>
+                </div>
+            </div>
+        </div>
+        {#                <div class="content"> {{ post.specific.body|richtext }} </div>#}
+    {% endfor %}
+{% endblock %}
