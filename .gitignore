@@ -2,3 +2,5 @@
 db.*
 migrations/
 *.sass
+*.pyc
+__pycache__/
