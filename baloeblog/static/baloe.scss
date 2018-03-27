@@ -1,0 +1,23 @@
+// 1. Import the initial variables
+@import "sass/utilities/initial-variables";
+@import "sass/utilities/functions";
+
+// 2. Set your own initial variables
+// Update blue
+//$blue: #72d0eb;
+// Add pink and its invert
+// Add a serif family
+
+// 3. Set the derived variables
+// Use the new pink as the primary color
+$primary: $blue;
+// Use the existing orange as the danger color
+$danger: $purple;
+// Use the new serif family
+$box-shadow: 0 2px 3px rgba($grey-light, 0.5), 0 0 0 1px rgba($grey-light, 0.2);
+
+// 4. Setup your Custom Colors
+
+
+// 6. Import the rest of Bulma
+@import "bulma";

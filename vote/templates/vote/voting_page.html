@@ -2,7 +2,6 @@
 
 {% load wagtailcore_tags wagtailimages_tags %}
 
-{% block body_class %}template-blogpage{% endblock %}
 
 {% block content %}
     <div class="tile is-antecestor">
@@ -18,28 +17,97 @@
             </div>
         </div>
     </div>
-
+    <div id="votes">
     <div class="tile is-antecestor">
         <div class="tile is-parent">
             <div class="tile is-child box">
                 <nav class="level">
-                    {% for voting in page.specific.votings.all %}
-{#                    <div class="level-item has-text-centered">#}
-{#                        <div>#}
-{#                            <p class="heading">Most votes Schacht</p>#}
-{#                            <p class="title">{{ page.specific.voting.most_schacht_name }}</p>#}
-{#                            <p class="heading">{{ page.specific.voting.most_schacht_name }}</p>#}
-{#                        </div>#}
-{#                    </div>#}
-                        <p> {{ voting }} </p>
-                    {% endfor %}
-
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading"> Meeste stemmen Schacht </p>
+                            <p class="title has-text-info">{{ best_schacht.name }}</p>
+                            <p class="title ">{{ best_schacht.no_votes }}</p>
+                        </div>
+                    </div>
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading"> Meeste stemmen Por </p>
+                            <p class="title has-text-danger">{{ best_por.name }}</p>
+                            <p class="title">{{ best_por.no_votes }}</p>
+                        </div>
+                    </div>
                 </nav>
 
-                <p><a class="button is-link" href="{{ page.get_parent.url }}">Return to blog</a></p>
             </div>
         </div>
     </div>
+    <div class="tile is-antecestor">
+        <div class="tile is-parent">
+            <div class="tile is-child box">
+                {{ table | safe }}
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="tile is-antecestor">
+        <div class="tile is-parent">
+            <div class="tile is-child box">
+                <form method="get" action="/stem">
+                    <p> Welke schacht en por crashen dit jaar niet met een go-kart met met de niet-tequila? Gok op je
+                        favoriet </p>
+                    <p> De winnaar krijgt een draadloze oplader van onze sponser KPMG! </p>
+                    <div class="field">
+                        <label class="label">Schacht:</label>
+
+                        <div class="control">
+
+                            <div class="select">
+                                <select name="schacht" required>
+                                    {% for schacht in schachten %}
+                                        <option value="{{ schacht.pk }}">{{ schacht.name }}</option>
+                                    {% endfor %}
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Por:</label>
+
+                        <div class="control">
+                            <div class="select">
+                                <select name="por" required>
+                                    {% for schacht in porren %}
+                                        <option value="{{ schacht.pk }}">{{ schacht.name }}</option>
+                                    {% endfor %}
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Naam:</label>
+                        <div class="control">
+                            <input required class="input" type="text" placeholder="Jos Smos" name="name">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Schiftingsvraag: om hoe laat crasht de eerste schacht/por? (uu:mm) </label>
+                        <div class="control">
+                            <input required class="input" type="time" value="15:12" name="time">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary" type="submit"> Verstuur</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <p><a class="button is-link" href="{{ page.get_parent.url }}">Return to blog</a></p>
 
 
 {% endblock %}

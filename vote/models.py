@@ -1,68 +1,79 @@
 from django.db import models
-from django.utils import timezone
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailcore.models import Page
 
 
-class Team(models.Model):
-    name = models.CharField(max_length=63)
-    image = models.ImageField(null=True, blank=True)
+class Schacht(models.Model):
+    name = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
         return self.name
 
-
-class Voting(models.Model):
-    short_name = models.CharField(max_length=15, unique=True)
-    teams = models.ManyToManyField(Team)
-    end = models.DateTimeField()
+    def __gt__(self, other):
+        return self.no_votes > other.no_votes
 
     @property
-    def has_ended(self):
-        return timezone.now() >= self.end
+    def no_votes(self):
+        return self.votes.all().count()
 
-    @property
-    def votes_per_team(self):
-        output = {}
-        for team in self.teams.filter(voting=self):
-            try:
-                q = self.votes.filter(team=team).count()
-            except:
-                q = -1
-            output[team.name] = q
-        output['finished'] = self.has_ended
-        return output
+    @staticmethod
+    def best():
+        return max(Schacht.objects.all())
 
-    @property
-    def best_name(self):
-        return self.votes.order_by('votes').reverse().first().name
 
-    @property
-    def best_vote(self):
-        return self.votes.order_by('votes')
+class Por(models.Model):
+    name = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
-        return '%s %s' % (self.short_name, self.votes_per_team)
+        return self.name
+
+    def __gt__(self, other):
+        return self.no_votes > other.no_votes
+
+    @property
+    def no_votes(self):
+        return self.votes.all().count()
+
+    @staticmethod
+    def best():
+        return max(Por.objects.all())
 
 
 class Vote(models.Model):
-    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, related_name='team')
-    voting = models.ForeignKey(Voting, on_delete=models.SET_NULL, null=True, related_name='votes')
+    schacht = models.ForeignKey(Schacht, on_delete=models.CASCADE, related_name='votes', null=True, blank=True)
+    por = models.ForeignKey(Por, on_delete=models.CASCADE, related_name='votes', null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
+    name = models.CharField(max_length=64, default='A', unique=True)
 
     def __str__(self):
-        return '%s for %s' % (self.voting, self.team)
+        return '%s & %s by %s' % (self.schacht, self.por, self.name)
+
+
+def make_table():
+    output = '<table style="width:100%"> <tr> <th>Schachten</th> <th>Votes</th> <th>Porren </th> <th>Votes </th> </tr>'
+    for schacht, por in list(zip(Schacht.objects.all(), Por.objects.all())):
+        output += '<tr> <td> %s </td> <td> %s </td> <td> %s </td> <td> %s </td> </tr>' % (
+            schacht.name, schacht.no_votes, por.name, por.no_votes)
+    return output + '</table>'
 
 
 class VotingPage(Page):
     intro = models.CharField(max_length=250)
     body = RichTextField(blank=True)
-    voting = models.NullBooleanField(default=True)
-    votings = models.ManyToManyField(Voting)
+    plain_html = models.TextField()
+
+    def get_context(self, request, *args, **kwargs):
+        context = super(VotingPage, self).get_context(request, *args, **kwargs)
+        context['schachten'] = Schacht.objects.all()
+        context['porren'] = Por.objects.all()
+        context['best_schacht'] = Schacht.best()
+        context['best_por'] = Por.best()
+        context['table'] = make_table()
+        return context
 
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
         FieldPanel('body', classname="full"),
-        FieldPanel('voting'),
-        FieldPanel('votings'),
+        FieldPanel('plain_html', classname="full")
     ]

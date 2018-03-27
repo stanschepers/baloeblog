@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags static %}
+
+{% block content %}
+
+    <div style="display:table-cell; text-align:center;position: absolute;width: 100%;height: 5%">
+        {% if not page.specific.mature_content %}<img height="128" width="128" src="{% static 'img/baloeTube.png' %}"/>
+        {% else %} <img height="128" width="128" src="{% static 'img/baloeHub.png' %}"/> {% endif %}
+    </div>
+    <br/>
+    <br/>
+
+    <div class="tile is-antecestor">
+        <div class="tile is-parent">
+            <div class="tile is-child box">
+                <div class="content">{{ page.intro| richtext }}</div>
+            </div>
+        </div>
+    </div>
+
+    {% for post in page.get_children %}
+        <div class="tile is-antecestor">
+            <div class="tile is-parent">
+                <div class="tile is-child box">
+                    <h2 style="font-size: 18pt"><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+
+                    {% image post.get_first_photo width-640 %}
+
+                </div>
+            </div>
+        </div>
+        {#                <div class="content"> {{ post.specific.body|richtext }} </div>#}
+    {% endfor %}
+{% endblock %}
