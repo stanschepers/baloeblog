@@ -30,6 +30,14 @@
                 </div>
             </div>
         </div>
-        {#                <div class="content"> {{ post.specific.body|richtext }} </div>#}
     {% endfor %}
+    <div class="tile is-antecestor">
+        <div class="tile is-parent">
+            <div class="tile is-child box">
+                {% if  page.specific.mature_content %}
+                    <img height="128" width="128" src="{% static 'img/baloeTube.png' %}"/>
+                {% else %} <img height="128" width="128" src="{% static 'img/baloeHub.png' %}"/> {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
