@@ -34,6 +34,13 @@
             </div>
         </div>
     </div>
+    <div class="tile is-antecestor">
+        <div class="tile is-parent">
+            <div class="tile is-child box">
+                {{ page.specific.plain_html }}
+            </div>
+        </div>
+    </div>
     <p><a class="button is-link" href="{{ page.get_parent.url }}">Return to blog</a></p>
 
 {% endblock %}

@@ -18,7 +18,8 @@ class BlogIndexPage(Page):
 class BlogPage(Page):
     date = models.DateField("Post date")
     intro = models.CharField(max_length=250)
-    body = RichTextField(blank=True)
+    body = RichTextField(blank=True, null=True)
+    plain_html = models.TextField(blank=True, null=True)
 
     search_fields = Page.search_fields + [
         index.SearchField('intro'),
@@ -29,6 +30,7 @@ class BlogPage(Page):
         FieldPanel('date'),
         FieldPanel('intro'),
         FieldPanel('body', classname="full"),
+        FieldPanel('plain_html', classname="full"),
         InlinePanel('gallery_images', label="Gallery images"),
     ]
 
