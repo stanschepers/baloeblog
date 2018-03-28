@@ -31,9 +31,11 @@
             </div>
         </div>
     {% endfor %}
+    <div style="display:table-cell; text-align:center;position: absolute;width: 100%;height: 5%">
 
-    {% if  page.specific.mature_content %}
-        <img height="128" width="128" src="{% static 'img/baloeTube.png' %}"/>
-    {% else %} <img height="128" width="128" src="{% static 'img/baloeHub.png' %}"/> {% endif %}
+        {% if  page.specific.mature_content %}
+            <img height="128" width="128" src="{% static 'img/baloeTube.png' %}"/>
+        {% else %} <img height="128" width="128" src="{% static 'img/baloeHub.png' %}"/> {% endif %}
+    </div>
 
 {% endblock %}
